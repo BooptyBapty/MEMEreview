@@ -16,7 +16,6 @@ const func = async ()=>{
         const chuspal = await collection.find({"account_id": 351063})
         const c = await chuspal.toArray()
         console.table(c);
-
     }catch(err){
         console.log(err);
     }finally{
