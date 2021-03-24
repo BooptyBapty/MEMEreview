@@ -9,13 +9,10 @@ const func = async ()=>{
     const client = new MongoClient(uri)
     try{
         await client.connect();
-        const db = client.db("sample_analytics")
+        const db = client.db("sample_supplies")
         console.log(db.databaseName);
+        db.dropDatabase();
 
-        const collection = db.collection("accounts");
-        const chuspal = await collection.find({"account_id": 351063})
-        const c = await chuspal.toArray()
-        console.table(c);
     }catch(err){
         console.log(err);
     }finally{
