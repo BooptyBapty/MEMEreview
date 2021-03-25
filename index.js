@@ -1,25 +1,38 @@
 const express = require('express')
-const { MongoClient } = require('mongodb');
+// const { MongoClient } = require('mongodb');
+const mongo = require('mongodb');
+const monk = require('monk')
 require('dotenv').config()
 
 const app = express()
 
 const uri = process.env.URI;
-const func = async ()=>{
-    const client = new MongoClient(uri)
-    try{
-        await client.connect();
-        const db = client.db("sample_supplies")
-        console.log(db.databaseName);
-        db.dropDatabase();
 
-    }catch(err){
+const add = async ()=>{
+    try{
+        const db = await monk(uri);
+        const collection = db.get('phucc')
+        await collection.insert([{a: 1}, {a: 2}, {a: 3}]);
+    } catch(err){
         console.log(err);
-    }finally{
-        client.close();
+    } finally{
+        db.close();
     }
 }
-func();
+
+add()
+
+// const func = async ()=>{
+//     const client = new MongoClient(uri)
+//     try{
+//         await client.connect();
+//     }catch(err){
+//         console.log(err);
+//     }finally{
+//         client.close();
+//     }
+// }
+// func();
 
 app.get('/', (req, res)=>{
     res.send('henlo')
