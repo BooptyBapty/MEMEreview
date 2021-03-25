@@ -1,38 +1,22 @@
 const express = require('express')
-// const { MongoClient } = require('mongodb');
-const mongo = require('mongodb');
-const monk = require('monk')
+const { MongoClient } = require('mongodb');
 require('dotenv').config()
 
 const app = express()
 
 const uri = process.env.URI;
 
-const add = async ()=>{
+const func = async ()=>{
+    const client = new MongoClient(uri,{useUnifiedTopology: true})
     try{
-        const db = await monk(uri);
-        const collection = db.get('phucc')
-        await collection.insert([{a: 1}, {a: 2}, {a: 3}]);
-    } catch(err){
+        client.connect().then(()=>{console.log('connected')})
+    }catch(err){
         console.log(err);
-    } finally{
-        db.close();
+    }finally{
+        client.close();
     }
 }
-
-add()
-
-// const func = async ()=>{
-//     const client = new MongoClient(uri)
-//     try{
-//         await client.connect();
-//     }catch(err){
-//         console.log(err);
-//     }finally{
-//         client.close();
-//     }
-// }
-// func();
+func();
 
 app.get('/', (req, res)=>{
     res.send('henlo')
